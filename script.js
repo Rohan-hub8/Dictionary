@@ -15,12 +15,10 @@ async function updateData() {
 
     const URL = `${BASE_URL}${inVal}`;
     let response = await fetch(URL);
-    
-    if(inVal === "") {
+
+    if (inVal === "") {
         result.innerHTML = `<div class="err">Enter the word</div>`;
-    } else if(response.status == 404) {
-        result.innerHTML = `<div class="err">Couldn't find the word</div>`;
-    } else {
+    } else if (response.status == 200) {
         let data = await response.json();
         result.innerHTML = `
         <div class="word">
@@ -36,8 +34,10 @@ async function updateData() {
                 <p class="ex">${data[0].meanings[0].definitions[0].example}</p>
             </div>`;
         audio.setAttribute("src", data[0].phonetics[0].audio);
+    } else {
+        result.innerHTML = `<div class="err">Couldn't find the word</div>`;
     }
-} 
+}
 
 function playAudio() {
     audio.play();
